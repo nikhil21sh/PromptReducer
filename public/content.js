@@ -48,16 +48,22 @@ function injectCompressorButton(textarea) {
         btn.innerHTML = "⏳ Compressing...";
         btn.disabled = true;
 
-        // Call our ML backend
-        chrome.runtime.sendMessage({ action: "compress", text: originalText, ratio: 0.3 }, (response) => {
-            if (response && response.status === "success") {
-                setNativeValue(textarea, response.compressedText);
-                console.log(`Shrunk from ${response.originalLength} to ${response.compressedLength} chars.`);
-            } else {
-                console.error("Compression failed", response?.message);
-            }
-            btn.innerHTML = originalButtonText;
-            btn.disabled = false;
+        // NEW: Fetch the user's setting from the popup BEFORE compressing
+        chrome.storage.local.get(['compressionRatio'], (result) => {
+            // Convert the 30% back into a 0.3 math ratio
+            let userRatio = (result.compressionRatio || 30) / 100;
+
+            // Call our ML backend with the user's specific ratio
+            chrome.runtime.sendMessage({ action: "compress", text: originalText, ratio: userRatio }, (response) => {
+                if (response && response.status === "success") {
+                    setNativeValue(textarea, response.compressedText);
+                    console.log(`Shrunk from ${response.originalLength} to ${response.compressedLength} chars using a ${userRatio * 100}% drop rate.`);
+                } else {
+                    console.error("Compression failed", response?.message);
+                }
+                btn.innerHTML = originalButtonText;
+                btn.disabled = false;
+            });
         });
     });
 

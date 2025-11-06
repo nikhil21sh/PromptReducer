@@ -5,12 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Compressor UI</title>
     <style>
-      body { width: 300px; padding: 15px; font-family: sans-serif; }
-      button { padding: 8px 12px; cursor: pointer; }
+      body { width: 320px; padding: 16px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; margin: 0; }
+      h3 { margin-top: 0; color: #1e293b; font-size: 18px; }
+      .slider-container { background: white; padding: 16px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+      label { font-weight: 600; color: #475569; font-size: 14px; display: flex; justify-content: space-between; }
+      input[type="range"] { width: 100%; margin-top: 12px; cursor: pointer; }
+      .status { margin-top: 16px; font-size: 12px; color: #10b981; font-weight: 600; text-align: center; }
     </style>
   </head>
   <body>
-    <h3>Prompt Compressor</h3>
-    <p>Status: <span style="color: green;">ML Engine Ready</span></p>
+    <h3>🪄 Prompt Compressor</h3>
+    
+    <div class="slider-container">
+      <label>
+        Compression Aggressiveness
+        <span id="ratio-display">30%</span>
+      </label>
+      <input type="range" id="ratio-slider" min="10" max="70" step="5" value="30">
+    </div>
+
+    <div class="status"> ML Engine Active & Ready</div>
+
+    <script src="popup.js"></script>
   </body>
 </html>
